@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using SagaOrchestrator.Api.Models.Saga;
 using SagaOrchestrator.Api.Models.Saga.Activities;
 using SagaPattern.Core.Models;
@@ -12,7 +13,7 @@ namespace SagaOrchestrator.Api.Controllers;
 public class SagaController(IHttpClientFactory httpClientFactory) : ControllerBase
 {
     [HttpPost]
-    [Route("api/saga")]
+    [Route("api/do-not-use")]
     public async Task<IActionResult> ProcessOrder([FromBody] Order order)
     {
         // step 1: create order
@@ -46,7 +47,7 @@ public class SagaController(IHttpClientFactory httpClientFactory) : ControllerBa
     }
 
     [HttpPost]
-    [Route("api/saga/process")]
+    [Route("api/")]
     public async Task<IActionResult> ProcessOrderNew([FromBody] Order order)
     {
         var orderSaga = new SagaPattern.Core.Models.Saga.SagaOrchestrator();
@@ -60,31 +61,36 @@ public class SagaController(IHttpClientFactory httpClientFactory) : ControllerBa
 
     private async Task<HttpResponseMessage> CreateOrder(Order order)
     {
-        var client = httpClientFactory.CreateClient("OrderService");
-        return await client.PostAsJsonAsync("api/order", order); // substitute with order api url
+        return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        // var client = httpClientFactory.CreateClient("OrderService");
+        // return await client.PostAsJsonAsync("api/order", order); // substitute with order api url
     }
     
     private async Task<HttpResponseMessage> ReserveInventory(Order order)
     {
-        var client = httpClientFactory.CreateClient("InventoryService");
-        return await client.PostAsJsonAsync("api/inventory", order); // substitute with inventory api url
+        return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        // var client = httpClientFactory.CreateClient("InventoryService");
+        // return await client.PostAsJsonAsync("api/inventory", order); // substitute with inventory api url
     }
 
     private async Task<HttpResponseMessage> ProcessPayment(Order order)
     {
-        var client = httpClientFactory.CreateClient("PaymentService");
-        return await client.PostAsJsonAsync("api/payment", order); // substitute with payment api url
+        return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        // var client = httpClientFactory.CreateClient("PaymentService");
+        // return await client.PostAsJsonAsync("api/payment", order); // substitute with payment api url
     }
     
     private async Task<HttpResponseMessage> CancelOrder(int orderId)
     {
-        var client = httpClientFactory.CreateClient("OrderService");
-        return await client.DeleteAsync($"api/order/{orderId}"); // substitute with order api url
+        return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        // var client = httpClientFactory.CreateClient("OrderService");
+        // return await client.DeleteAsync($"api/order/{orderId}"); // substitute with order api url
     }
     
     private async Task<HttpResponseMessage> ReleaseInventory(string productId, int quantity)
     {
-        var client = httpClientFactory.CreateClient("InventoryService");
-        return await client.PostAsJsonAsync($"api/inventory/release", new {productId, quantity}); // substitute with inventory api url
+        return await Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        // var client = httpClientFactory.CreateClient("InventoryService");
+        // return await client.PostAsJsonAsync($"api/inventory/release", new {productId, quantity}); // substitute with inventory api url
     }   
 }
